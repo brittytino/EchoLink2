@@ -1,20 +1,77 @@
-import React, { useState } from 'react';
+import React, { useState, Fragment } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
-import { Fragment } from 'react';
-import { FaUser, FaUsers, FaToggleOn, FaCheck } from 'react-icons/fa';
+import { FaUser, FaEnvelope, FaBuilding, FaPhone, FaGlobe, FaClock, FaLanguage, FaUsers, FaCheck, FaTimes, FaLock, FaUserTag } from 'react-icons/fa';
 
-export default function AddUserDialog({ isOpen, closeModal, darkMode }) {
-  const [username, setUsername] = useState('');
-  const [name, setName] = useState('');
-  const [group, setGroup] = useState('');
-  const [status, setStatus] = useState(true);
+export default function UserExtensionDialog({ isOpen, closeModal, darkMode }) {
+  const [formData, setFormData] = useState({
+    username: '',
+    password: '',
+    confirm_password: '',
+    email: '',
+    first_name: '',
+    last_name: '',
+    organization: '',
+    extension: '',
+    maximum_login: '',
+    language: 'en-us',
+    timezone: 'Asia/Kolkata',
+    user_groups: '4d487ba7-b399-4a98-9780-000e7e9a725d|user',
+    domain: 'bc2fed7e-e575-42c1-9e53-3155f6019096',
+    user_enabled: 'true',
+    user_record: 'all',
+    context: 'Posting',
+    description: 'Company-name',
+    extension_enabled: 'true',
+  });
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Here you would typically send a request to your API to add the user
-    console.log('Adding user:', { username, name, group, status });
-    closeModal();
+  const [responseMessage, setResponseMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prevData => ({
+      ...prevData,
+      [name]: value,
+    }));
   };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+
+    if (formData.password !== formData.confirm_password) {
+      setResponseMessage('Passwords do not match');
+      setIsLoading(false);
+      return;
+    }
+
+    try {
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      console.log('Form submitted:', formData);
+      setResponseMessage('User and Extension created successfully!');
+      closeModal();
+    } catch (error) {
+      setResponseMessage('An error occurred while creating user and extension.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const inputFields = [
+    { name: 'username', icon: FaUser, type: 'text' },
+    { name: 'password', icon: FaLock, type: 'password' },
+    { name: 'confirm_password', icon: FaLock, type: 'password' },
+    { name: 'email', icon: FaEnvelope, type: 'email' },
+    { name: 'first_name', icon: FaUser, type: 'text' },
+    { name: 'last_name', icon: FaUser, type: 'text' },
+    { name: 'organization', icon: FaBuilding, type: 'text' },
+    { name: 'extension', icon: FaPhone, type: 'text' },
+    { name: 'maximum_login', icon: FaUsers, type: 'number' },
+    { name: 'language', icon: FaLanguage, type: 'text' },
+    { name: 'timezone', icon: FaClock, type: 'text' },
+    { name: 'domain', icon: FaGlobe, type: 'text' },
+    { name: 'user_groups', icon: FaUserTag, type: 'text' },
+  ];
 
   return (
     <Transition appear show={isOpen} as={Fragment}>
@@ -46,91 +103,79 @@ export default function AddUserDialog({ isOpen, closeModal, darkMode }) {
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className={`w-full max-w-md transform overflow-hidden rounded-2xl p-6 text-left align-middle shadow-xl transition-all ${darkMode ? 'bg-gray-800 text-white' : 'bg-white'}`}>
+              <Dialog.Panel className={`w-full max-w-4xl transform overflow-hidden rounded-2xl p-6 text-left align-middle shadow-xl transition-all ${darkMode ? 'bg-gray-800 text-white' : 'bg-white'}`}>
                 <Dialog.Title
                   as="h3"
-                  className="text-lg font-medium leading-6 mb-4"
+                  className="text-2xl font-semibold leading-6 mb-6 flex justify-between items-center"
                 >
-                  Add New User
+                  Create User and Extension
+                  <button
+                    onClick={closeModal}
+                    className="text-gray-400 hover:text-gray-500 focus:outline-none"
+                  >
+                    <FaTimes className="w-6 h-6" />
+                  </button>
                 </Dialog.Title>
-                <form onSubmit={handleSubmit} className="space-y-4">
-                  <div>
-                    <label htmlFor="username" className="block text-sm font-medium mb-1">Username</label>
-                    <div className="mt-1 relative rounded-md shadow-sm">
-                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <FaUser className="text-gray-400" />
+                <form onSubmit={handleSubmit} className="space-y-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {inputFields.map(({ name, icon: Icon, type }) => (
+                      <div key={name}>
+                        <label htmlFor={name} className="block text-sm font-medium mb-1">
+                          {name.replace(/_/g, ' ').replace(/\b\w/g, char => char.toUpperCase())}
+                        </label>
+                        <div className="mt-1 relative rounded-md shadow-sm">
+                          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <Icon className={`${darkMode ? 'text-gray-400' : 'text-gray-500'}`} />
+                          </div>
+                          <input
+                            type={type}
+                            name={name}
+                            id={name}
+                            className={`block w-full pl-10 pr-3 py-2 sm:text-sm rounded-md ${
+                              darkMode 
+                                ? 'bg-gray-700 text-white border-gray-600 focus:ring-blue-500 focus:border-blue-500' 
+                                : 'bg-white text-gray-900 border-gray-300 focus:ring-blue-500 focus:border-blue-500'
+                            }`}
+                            placeholder={`Enter ${name.replace(/_/g, ' ')}`}
+                            value={formData[name]}
+                            onChange={handleChange}
+                            required
+                          />
+                        </div>
                       </div>
-                      <input
-                        type="text"
-                        name="username"
-                        id="username"
-                        className={`block w-full pl-10 sm:text-sm rounded-md ${darkMode ? 'bg-gray-700 text-white' : 'bg-white text-gray-900'} focus:ring-blue-500 focus:border-blue-500`}
-                        placeholder="Enter username"
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
-                        required
-                      />
-                    </div>
+                    ))}
                   </div>
-                  <div>
-                    <label htmlFor="name" className="block text-sm font-medium mb-1">Name</label>
-                    <div className="mt-1 relative rounded-md shadow-sm">
-                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <FaUser className="text-gray-400" />
-                      </div>
-                      <input
-                        type="text"
-                        name="name"
-                        id="name"
-                        className={`block w-full pl-10 sm:text-sm rounded-md ${darkMode ? 'bg-gray-700 text-white' : 'bg-white text-gray-900'} focus:ring-blue-500 focus:border-blue-500`}
-                        placeholder="Enter name"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                        required
-                      />
-                    </div>
-                  </div>
-                  <div>
-                    <label htmlFor="group" className="block text-sm font-medium mb-1">Group</label>
-                    <div className="mt-1 relative rounded-md shadow-sm">
-                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <FaUsers className="text-gray-400" />
-                      </div>
-                      <input
-                        type="text"
-                        name="group"
-                        id="group"
-                        className={`block w-full pl-10 sm:text-sm rounded-md ${darkMode ? 'bg-gray-700 text-white' : 'bg-white text-gray-900'} focus:ring-blue-500 focus:border-blue-500`}
-                        placeholder="Enter group"
-                        value={group}
-                        onChange={(e) => setGroup(e.target.value)}
-                        required
-                      />
-                    </div>
-                  </div>
-                  <div>
-                    <label htmlFor="status" className="block text-sm font-medium mb-1">Status</label>
-                    <div className="mt-1 flex items-center">
-                      <button
-                        type="button"
-                        className={`relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 ${status ? 'bg-blue-600' : 'bg-gray-200'}`}
-                        onClick={() => setStatus(!status)}
-                      >
-                        <span className={`${status ? 'translate-x-5' : 'translate-x-0'} pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200`} />
-                      </button>
-                      <span className="ml-3">{status ? 'Active' : 'Inactive'}</span>
-                    </div>
-                  </div>
-                  <div className="mt-4">
+                  <div className="flex items-center justify-between mt-8">
+                    <button
+                      type="button"
+                      onClick={closeModal}
+                      className={`px-4 py-2 text-sm font-medium rounded-md ${
+                        darkMode
+                          ? 'bg-gray-600 text-white hover:bg-gray-500'
+                          : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                      } focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2`}
+                    >
+                      Cancel
+                    </button>
                     <button
                       type="submit"
-                      className="inline-flex justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                      className={`inline-flex justify-center rounded-md border border-transparent px-4 py-2 text-sm font-medium text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 ${
+                        isLoading
+                          ? 'bg-gray-400 cursor-not-allowed'
+                          : 'bg-blue-600 hover:bg-blue-700'
+                      }`}
+                      disabled={isLoading}
                     >
                       <FaCheck className="mr-2" />
-                      Add User
+                      {isLoading ? 'Creating...' : 'Create User and Extension'}
                     </button>
                   </div>
                 </form>
+                {responseMessage && (
+                  <p className={`mt-4 text-sm ${responseMessage.includes('successfully') ? 'text-green-500' : 'text-red-500'}`}>
+                    {responseMessage}
+                  </p>
+                )}
               </Dialog.Panel>
             </Transition.Child>
           </div>

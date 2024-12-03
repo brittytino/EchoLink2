@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { FaUserPlus, FaEdit } from 'react-icons/fa';
 import AddUserDialog from './AddUserDialog';
+import EditUserDialog from './EditUserDialog';
 
 const Users = ({ darkMode }) => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isAddUserDialogOpen, setIsAddUserDialogOpen] = useState(false);
+  const [isEditUserDialogOpen, setIsEditUserDialogOpen] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(null);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -27,19 +30,29 @@ const Users = ({ darkMode }) => {
     fetchUsers();
   }, []);
 
-  const toggleStatus = async (id, currentStatus) => {
-    const updatedStatus = !currentStatus;
-    setUsers(users.map(user => 
-      user.id === id ? { ...user, user_enabled: updatedStatus } : user
-    ));
-  };
-
   const openAddUserDialog = () => {
     setIsAddUserDialogOpen(true);
   };
 
   const closeAddUserDialog = () => {
     setIsAddUserDialogOpen(false);
+  };
+
+  const openEditUserDialog = (user) => {
+    setSelectedUser(user);
+    setIsEditUserDialogOpen(true);
+  };
+
+  const closeEditUserDialog = () => {
+    setIsEditUserDialogOpen(false);
+    setSelectedUser(null);
+  };
+
+  const handleSaveUser = (editedUser) => {
+    setUsers(users.map(user => 
+      user.id === editedUser.id ? editedUser : user
+    ));
+    // Here you would typically make an API call to update the user on the server
   };
 
   if (loading) return <p>Loading users...</p>;
@@ -82,7 +95,7 @@ const Users = ({ darkMode }) => {
                   </span>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                  <button onClick={() => toggleStatus(user.id, user.user_enabled)} className="text-yellow-500 hover:text-yellow-600 transition-colors duration-300 mr-2">
+                  <button onClick={() => openEditUserDialog(user)} className="text-yellow-500 hover:text-yellow-600 transition-colors duration-300 mr-2">
                     <FaEdit />
                   </button>
                 </td>
@@ -96,6 +109,15 @@ const Users = ({ darkMode }) => {
         closeModal={closeAddUserDialog}
         darkMode={darkMode}
       />
+      {selectedUser && (
+        <EditUserDialog 
+          isOpen={isEditUserDialogOpen} 
+          closeModal={closeEditUserDialog}
+          user={selectedUser}
+          onSave={handleSaveUser}
+          darkMode={darkMode}
+        />
+      )}
     </div>
   );
 };
