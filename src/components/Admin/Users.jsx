@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { FaUserPlus, FaTrash, FaEdit } from 'react-icons/fa';
+import { FaUserPlus, FaEdit } from 'react-icons/fa';
+import AddUserDialog from './AddUserDialog';
 
 const Users = ({ darkMode }) => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [isAddUserDialogOpen, setIsAddUserDialogOpen] = useState(false);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -14,7 +16,7 @@ const Users = ({ darkMode }) => {
           throw new Error(`Failed to fetch users: ${response.statusText}`);
         }
         const data = await response.json();
-        setUsers(data); // Assuming `data` is an array of user objects
+        setUsers(data);
         setLoading(false);
       } catch (err) {
         setError(err.message);
@@ -26,14 +28,19 @@ const Users = ({ darkMode }) => {
   }, []);
 
   const toggleStatus = async (id, currentStatus) => {
-    const updatedStatus = !currentStatus; // Toggle the boolean value
-    // Logic for updating status on the server goes here (API call).
-    // For now, updating the status locally:
+    const updatedStatus = !currentStatus;
     setUsers(users.map(user => 
       user.id === id ? { ...user, user_enabled: updatedStatus } : user
     ));
   };
 
+  const openAddUserDialog = () => {
+    setIsAddUserDialogOpen(true);
+  };
+
+  const closeAddUserDialog = () => {
+    setIsAddUserDialogOpen(false);
+  };
 
   if (loading) return <p>Loading users...</p>;
   if (error) return <p className="text-red-500">Error: {error}</p>;
@@ -42,7 +49,10 @@ const Users = ({ darkMode }) => {
     <div className={`container mx-auto p-6 ${darkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-800'}`}>
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-bold">Users</h2>
-        <button className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors duration-300">
+        <button 
+          onClick={openAddUserDialog}
+          className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors duration-300"
+        >
           <FaUserPlus />
           <span>Add New User</span>
         </button>
@@ -62,7 +72,7 @@ const Users = ({ darkMode }) => {
             {users.map(user => (
               <tr key={user.id} className={`transition-colors duration-300 ${darkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-50'}`}>
                 <td className="px-6 py-4 whitespace-nowrap">{user.username}</td>
-                <td className="px-6 py-4 whitespace-nowrap">{user.username}</td> {/* Adjust as needed */}
+                <td className="px-6 py-4 whitespace-nowrap">{user.username}</td>
                 <td className="px-6 py-4 whitespace-nowrap">{user.group_name}</td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
@@ -75,15 +85,20 @@ const Users = ({ darkMode }) => {
                   <button onClick={() => toggleStatus(user.id, user.user_enabled)} className="text-yellow-500 hover:text-yellow-600 transition-colors duration-300 mr-2">
                     <FaEdit />
                   </button>
-
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
+      <AddUserDialog 
+        isOpen={isAddUserDialogOpen} 
+        closeModal={closeAddUserDialog}
+        darkMode={darkMode}
+      />
     </div>
   );
 };
 
 export default Users;
+
