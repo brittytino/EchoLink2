@@ -1,31 +1,26 @@
 ﻿<!DOCTYPE html>
-
+<!--
+* Copyright (C) 2012-2018 Doubango Telecom <http://www.doubango.org>
+* License: BSD
+* This file is part of Open Source sipML5 solution <http://www.sipml5.org>
+-->
 <html>
+<!-- head -->
 <head>
     <meta charset="utf-8" />
-    <title>sipML5 live demo</title>
+    <title>Echolink</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="Keywords" content="doubango, sipML5, VoIP, HTML5, WebRTC, RTCWeb, SIP, IMS, Video chat, VP8, live demo " />
     <meta name="Description" content="HTML5 SIP client using WebRTC framework" />
     <meta name="author" content="Doubango Telecom" />
 
-   
+    <!-- SIPML5 API:
+    DEBUG VERSION: 'SIPml-api.js'
+    RELEASE VERSION: 'release/SIPml-api.js'
+    -->
     <script src="SIPml-api.js?svn=252" type="text/javascript"> </script>
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-    <script>
-        function sipRegister() {
-            document.getElementById("registrationSection").classList.add("hidden");
-            document.getElementById("callControlSection").classList.remove("hidden");
-        }
 
-        function sipUnRegister() {
-            document.getElementById("callControlSection").classList.add("hidden");
-            document.getElementById("registrationSection").classList.remove("hidden");
-        }
-    </script>
-    <script src="https://cdn.tailwindcss.com"></script>
     <!-- Styles -->
-     
     <link href="./assets/css/bootstrap.css" rel="stylesheet" />
     <style type="text/css">
         body {
@@ -139,134 +134,156 @@
     <link rel="apple-touch-icon-precomposed" href="./assets/ico/apple-touch-icon-57-precomposed.png" />
 </head>
 <body style="cursor:wait">
-    <div>
+    <div class="container">
         <div class="row-fluid">
-            <div id="registrationSection" class="max-w-md mx-auto bg-white rounded-lg shadow-lg p-12">
-                <div class="text-center mb-4">
-                    <label id="txtRegStatus" class="block text-sm text-gray-500 mb-2"></label>
-                    <h2 class="text-xl font-semibold text-gray-700">Registration</h2>
-                </div>
-                <form>
-                    <div class="mb-4">
-                        <label for="txtDisplayName" class="block text-sm font-medium text-gray-600">Display Name:</label>
-                        <div class="relative">
-                            <input 
-                                type="text" 
-                                id="txtDisplayName" 
-                                placeholder="e.g. John Doe" 
-                                class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-                            />
-                            <i class="fas fa-user absolute top-3 right-3 text-gray-400"></i>
-                        </div>
-                    </div>
-            
-                    <div class="mb-4">
-                        <label for="txtPrivateIdentity" class="block text-sm font-medium text-gray-600">Private Identity<sup>*</sup>:</label>
-                        <div class="relative">
-                            <input 
-                                type="text" 
-                                id="txtPrivateIdentity" 
-                                placeholder="e.g. +33600000000" 
-                                class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-                            />
-                            <i class="fas fa-phone-alt absolute top-3 right-3 text-gray-400"></i>
-                        </div>
-                    </div>
-            
-                    <div class="mb-4">
-                        <label for="txtPassword" class="block text-sm font-medium text-gray-600">Password:</label>
-                        <div class="relative">
-                            <input 
-                                type="password" 
-                                id="txtPassword" 
-                                class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-                            />
-                            <i class="fas fa-lock absolute top-3 right-3 text-gray-400"></i>
-                        </div>
-                    </div>
-            
-                    <div class="flex justify-between items-center mt-6">
-                        <button 
-                            type="button" 
-                            id="btnRegister" 
-                            onclick="sipRegister()" 
-                            class="flex items-center px-4 py-2 bg-green-500 text-white rounded-lg shadow-md hover:bg-green-600 focus:ring-2 focus:ring-green-300 disabled:opacity-50" 
-                            disabled>
-                            <i class="fas fa-sign-in-alt mr-2"></i> Log In
-                        </button>
-                        <button 
-                            type="button" 
-                            id="btnUnRegister" 
-                            onclick="sipUnRegister()" 
-                            class="flex items-center px-4 py-2 bg-red-500 text-white rounded-lg shadow-md hover:bg-red-600 focus:ring-2 focus:ring-red-300 disabled:opacity-50" 
-                            disabled>
-                            <i class="fas fa-sign-out-alt mr-2"></i> Log Out
-                        </button>
-                    </div>
-            
-                    <p class="text-xs text-gray-500 mt-4"><sup>*</sup> Mandatory Field</p>
-                </form>
-            </div>
-            <div id="callControlSection" class="hidden span7 well table-cell align-middle p-6 bg-gray-100 rounded shadow-md">
-                <label class="w-full text-center block text-lg font-medium mb-2" id="txtCallStatus">
+            <div class="span4 well">
+                <label style="width: 100%;" align="center" id="txtRegStatus">
                 </label>
-                <h2 class="text-2xl font-bold text-center mb-4">
-                    Call Control
+                <h2>
+                    Registration
                 </h2>
                 <br />
-                <table class="w-full">
+                <table style='width: 100%'>
                     <tr>
-                        <td class="whitespace-nowrap">
-                            <input type="text" id="txtPhoneNumber" placeholder="Enter phone number to call" class="w-full h-12 p-2 border rounded focus:outline-none focus:ring focus:ring-blue-300" />
+                        <td>
+                            <label style="height: 100%">
+                                Display Name:
+                            </label>
+                        </td>
+                        <td>
+                            <input type="text" style="width: 100%; height: 100%" id="txtDisplayName" value=""
+                                   placeholder="e.g. John Doe" />
                         </td>
                     </tr>
                     <tr>
-                        <td colspan="1" class="text-right mt-2">
-                            <div class="btn-toolbar flex items-center justify-end space-x-4">
+                        <td>
+                            <label style="height: 100%">
+                                Private Identity<sup>*</sup>:
+                            </label>
+                        </td>
+                        <td>
+                            <input type="text" style="width: 100%; height: 100%" id="txtPrivateIdentity" value=""
+                                   placeholder="e.g. +33600000000" />
+                        </td>
+                    </tr>
+                    <!-- <tr>
+                        <td>
+                            <label style="height: 100%">
+                                Public Identity<sup>*</sup>:
+                            </label>
+                        </td>
+                        <td>
+                            <input type="text" style="width: 100%; height: 100%" id="txtPublicIdentity" value=""
+                                   placeholder="e.g. sip:+33600000000@doubango.org" />
+                        </td>
+                    </tr> -->
+                    <tr>
+                        <td>
+                            <label style="height: 100%">Password:</label>
+                        </td>
+                        <td>
+                            <input type="password" style="width: 100%; height: 100%" id="txtPassword" value="" />
+                        </td>
+                    </tr>
+                    <!-- <tr>
+                        <td>
+                            <label style="height: 100%">Realm<sup>*</sup>:</label>
+                        </td>
+                        <td>
+                            <input type="text" style="width: 100%; height: 100%" id="txtRealm" value="" placeholder="e.g. doubango.org" />
+                        </td>
+                    </tr> -->
+                    <tr>
+                        <td colspan="2" align="right">
+                            <input type="button" class="btn btn-success" id="btnRegister" value="LogIn" disabled onclick='sipRegister();' />
+                            &nbsp;
+                            <input type="button" class="btn btn-danger" id="btnUnRegister" value="LogOut" disabled onclick='sipUnRegister();' />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3">
+                            <p class="small"><sup>*</sup> <i>Mandatory Field</i></p>
+                        </td>
+                    </tr>
+                    <!-- <tr>
+                        <td colspan="3">
+                            <a class="btn" href="http://code.google.com/p/sipml5/wiki/Public_SIP_Servers" target="_blank">Need SIP account?</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3">
+                            <a class="btn" href="./expert.htm" target="_blank">Expert mode?</a>
+                        </td>
+                    </tr> -->
+                </table>
+            </div>
+            <div id="divCallCtrl" class="span7 well" style='display:table-cell; vertical-align:middle'>
+                <label style="width: 100%;" align="center" id="txtCallStatus">
+                </label>
+                <h2>
+                    Call control
+                </h2>
+                <br />
+                <table style='width: 100%;'>
+                    <tr>
+                        <td style="white-space:nowrap;">
+                            <input type="text" style="width: 100%; height:100%;" id="txtPhoneNumber" value="" placeholder="Enter phone number to call" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="1" align="right">
+                            <div class="btn-toolbar" style="margin: 0; vertical-align:middle">
+                                <!--div class="btn-group">
+                                    <input type="button" id="btnBFCP" style="margin: 0; vertical-align:middle; height: 100%;" class="btn btn-primary" value="BFCP" onclick='sipShareScreen();' disabled />
+                                </div-->
                                 <div id="divBtnCallGroup" class="btn-group">
-                                    <button id="btnCall" disabled class="btn btn-primary bg-blue-500 text-white py-2 px-4 rounded shadow-md hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-300">Call</button>
-                                </div>
+                                    <button id="btnCall" disabled class="btn btn-primary" data-toggle="dropdown">Call</button>
+                                </div>&nbsp;&nbsp;
                                 <div class="btn-group">
-                                    <input type="button" id="btnHangUp" class="btn btn-primary bg-red-500 text-white py-2 px-4 rounded shadow-md hover:bg-red-600 focus:outline-none focus:ring focus:ring-red-300" value="HangUp" onclick="sipHangUp();" disabled />
+                                    <input type="button" id="btnHangUp" style="margin: 0; vertical-align:middle; height: 100%;" class="btn btn-primary" value="HangUp" onclick='sipHangUp();' disabled />
                                 </div>
                             </div>
                         </td>
                     </tr>
                     <tr>
-                        <td id="tdVideo" class="tab-video">
-                            <div id="divVideo" class="div-video border border-blue-500 relative w-full h-72">
-                                <div id="divVideoRemote" class="relative border border-blue-700 h-full w-full opacity-100">
-                                    <video class="video w-full h-full" id="video_remote" autoplay style="opacity: 0; background-color: #000000; transition: opacity 2s;"></video>
+                        <td id="tdVideo" class='tab-video'>
+                            <div id="divVideo" class='div-video'>
+                                <div id="divVideoRemote" style='position:relative; border:1px solid #009; height:100%; width:100%; z-index: auto; opacity: 1'>
+                                    <video class="video" width="100%" height="100%" id="video_remote" autoplay="autoplay" style="opacity: 0;
+                                        background-color: #000000; -webkit-transition-property: opacity; -webkit-transition-duration: 2s;"></video>
                                 </div>
-            
-                                <div id="divVideoLocalWrapper" class="relative border-0 z-10">
-                                    <iframe class="previewvideo hidden"></iframe>
-                                    <div id="divVideoLocal" class="previewvideo border-0 z-10">
-                                        <video class="video w-full h-full" id="video_local" autoplay muted style="opacity: 0; background-color: #000000; transition: opacity 2s;"></video>
+
+                                <div id="divVideoLocalWrapper" style="margin-left: 0px; border:0px solid #009; z-index: 1000">
+                                    <iframe class="previewvideo" style="border:0px solid #009; z-index: 1000"> </iframe>
+                                    <div id="divVideoLocal" class="previewvideo" style=' border:0px solid #009; z-index: 1000'>
+                                        <video class="video" width="100%" height="100%" id="video_local" autoplay="autoplay" muted="true" style="opacity: 0;
+                                            background-color: #000000; -webkit-transition-property: opacity;
+                                            -webkit-transition-duration: 2s;"></video>
                                     </div>
                                 </div>
-            
-                                <div id="divScreencastLocalWrapper" class="relative ml-24 border-0 z-10">
-                                    <iframe class="previewvideo hidden"></iframe>
-                                    <div id="divScreencastLocal" class="previewvideo border-0 z-10"></div>
+                                <div id="divScreencastLocalWrapper" style="margin-left: 90px; border:0px solid #009; z-index: 1000">
+                                    <iframe class="previewvideo" style="border:0px solid #009; z-index: 1000"> </iframe>
+                                    <div id="divScreencastLocal" class="previewvideo" style=' border:0px solid #009; z-index: 1000'>
+                                    </div>
                                 </div>
                             </div>
                         </td>
                     </tr>
                     <tr>
-                        <td class="text-center mt-4">
-                            <div id="divCallOptions" class="call-options opacity-0 mt-0 flex space-x-4 justify-center">
-                                <input type="button" class="btn bg-gray-200 py-2 px-4 rounded shadow-md hover:bg-gray-300 focus:outline-none focus:ring focus:ring-gray-300" id="btnFullScreen" value="FullScreen" disabled onclick="toggleFullScreen();" />
-                                <input type="button" class="btn bg-gray-200 py-2 px-4 rounded shadow-md hover:bg-gray-300 focus:outline-none focus:ring focus:ring-gray-300" id="btnMute" value="Mute" onclick="sipToggleMute();" />
-                                <input type="button" class="btn bg-gray-200 py-2 px-4 rounded shadow-md hover:bg-gray-300 focus:outline-none focus:ring focus:ring-gray-300" id="btnHoldResume" value="Hold" onclick="sipToggleHoldResume();" />
-                                <input type="button" class="btn bg-gray-200 py-2 px-4 rounded shadow-md hover:bg-gray-300 focus:outline-none focus:ring focus:ring-gray-300" id="btnTransfer" value="Transfer" onclick="sipTransfer();" />
-                                <input type="button" class="btn bg-gray-200 py-2 px-4 rounded shadow-md hover:bg-gray-300 focus:outline-none focus:ring focus:ring-gray-300" id="btnKeyPad" value="KeyPad" onclick="openKeyPad();" />
+                        <td align='center'>
+                            <div id='divCallOptions' class='call-options' style='opacity: 0; margin-top: 0px'>
+                                <input type="button" class="btn" style="" id="btnFullScreen" value="FullScreen" disabled onclick='toggleFullScreen();' /> &nbsp;
+                                <input type="button" class="btn" style="" id="btnMute" value="Mute" onclick='sipToggleMute();' /> &nbsp;
+                                <input type="button" class="btn" style="" id="btnHoldResume" value="Hold" onclick='sipToggleHoldResume();' /> &nbsp;
+                                <input type="button" class="btn" style="" id="btnTransfer" value="Transfer" onclick='sipTransfer();' /> &nbsp;
+                                <input type="button" class="btn" style="" id="btnKeyPad" value="KeyPad" onclick='openKeyPad();' />
                             </div>
                         </td>
                     </tr>
                 </table>
             </div>
         </div>
+
         <br />
     </div>
     <!-- /container -->
