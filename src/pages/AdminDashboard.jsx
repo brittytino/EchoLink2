@@ -21,7 +21,7 @@ const AdminDashboard = () => {
   useEffect(() => {
     const fetchNotifications = () => {
       setNotifications([
-        { id: 1, message: 'New user registered', time: '2 minutes ago' },
+        { id: 1, message: 'New user registered', time: '7 minutes ago' },
         { id: 2, message: 'Missed call from John Doe', time: '5 minutes ago' },
         { id: 3, message: 'System update available', time: '10 minutes ago' },
       ]);
