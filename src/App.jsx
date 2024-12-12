@@ -10,6 +10,8 @@ import { AuthProvider } from './context/AuthContext';
 import { AdminAuthProvider } from './context/AdminAuthContext';
 import PrivateRoute from './components/PrivateRoute';
 import PrivateAdminRoute from './components/PrivateAdminRoute';
+import SipModal from './components/SipModal';
+
 
 const App = () => {
   return (
@@ -23,6 +25,7 @@ const App = () => {
               <Route path="/admin-login" element={<AdminLoginPage />} />
               <Route path="/admin" element={<PrivateAdminRoute element={<AdminDashboard />} />} />
               <Route path="/server" element={<PrivateRoute element={<ServerTest />} />} />
+              <Route path='/sip' element={<SipModal />} />
             </Routes>
           </Router>
         </AdminAuthProvider>

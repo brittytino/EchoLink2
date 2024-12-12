@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FaTachometerAlt, FaUsers, FaPhoneAlt, FaCog, FaPhone, FaTable, FaSun, FaMoon, FaSignOutAlt, FaBell, FaBars } from 'react-icons/fa';
-import { Dashboard, Users, CDR, Settings, Call, Extension } from '../components/Admin';
-
+import { Dashboard, Users, CDR, Settings, Call, Extension} from '../components/Admin';
+import ForgotPassword from '../components/Admin/ForgotPassword'; // Update this line with the correct path
 
 const AdminDashboard = () => {
   const [activeComponent, setActiveComponent] = useState('Dashboard');
@@ -41,6 +41,8 @@ const AdminDashboard = () => {
         return <Extension darkMode={darkMode} />;
       case 'Settings':
         return <Settings darkMode={darkMode} />;
+      case 'ForgotPassword':
+        return <ForgotPassword darkMode={darkMode} />;
       default:
         return <Dashboard darkMode={darkMode} />;
     }
@@ -53,6 +55,7 @@ const AdminDashboard = () => {
     { name: 'Call', icon: FaPhone },
     { name: 'Extension', icon: FaTable },
     { name: 'Settings', icon: FaCog },
+    { name: 'ForgotPassword', icon: FaSignOutAlt },
   ];
 
   const handleLogout = () => {

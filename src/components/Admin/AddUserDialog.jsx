@@ -1,6 +1,6 @@
 import React, { useState, Fragment } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
-import { FaUser, FaEnvelope, FaBuilding, FaPhone, FaGlobe, FaClock, FaLanguage, FaUsers, FaCheck, FaTimes, FaLock, FaUserTag } from 'react-icons/fa';
+import { FaUser, FaEnvelope, FaBuilding, FaPhone, FaUsers, FaCheck, FaTimes, FaLock, FaUserTag } from 'react-icons/fa';
 
 export default function UserExtensionDialog({ isOpen, closeModal, darkMode }) {
   const [formData, setFormData] = useState({
@@ -13,10 +13,7 @@ export default function UserExtensionDialog({ isOpen, closeModal, darkMode }) {
     organization: '',
     extension: '',
     maximum_login: '',
-    language: 'en-us',
-    timezone: 'Asia/Kolkata',
-    user_groups: '4d487ba7-b399-4a98-9780-000e7e9a725d|user',
-    domain: 'bc2fed7e-e575-42c1-9e53-3155f6019096',
+    user_groups: 'user',
     user_enabled: 'true',
     user_record: 'all',
     context: 'Posting',
@@ -67,10 +64,6 @@ export default function UserExtensionDialog({ isOpen, closeModal, darkMode }) {
     { name: 'organization', icon: FaBuilding, type: 'text' },
     { name: 'extension', icon: FaPhone, type: 'text' },
     { name: 'maximum_login', icon: FaUsers, type: 'number' },
-    { name: 'language', icon: FaLanguage, type: 'text' },
-    { name: 'timezone', icon: FaClock, type: 'text' },
-    { name: 'domain', icon: FaGlobe, type: 'text' },
-    { name: 'user_groups', icon: FaUserTag, type: 'text' },
   ];
 
   return (
@@ -144,6 +137,32 @@ export default function UserExtensionDialog({ isOpen, closeModal, darkMode }) {
                         </div>
                       </div>
                     ))}
+                    <div>
+                      <label htmlFor="user_groups" className="block text-sm font-medium mb-1">
+                        User Groups
+                      </label>
+                      <div className="mt-1 relative rounded-md shadow-sm">
+                        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                          <FaUserTag className={`${darkMode ? 'text-gray-400' : 'text-gray-500'}`} />
+                        </div>
+                        <select
+                          name="user_groups"
+                          id="user_groups"
+                          className={`block w-full pl-10 pr-3 py-2 sm:text-sm rounded-md ${
+                            darkMode 
+                              ? 'bg-gray-700 text-white border-gray-600 focus:ring-blue-500 focus:border-blue-500' 
+                              : 'bg-white text-gray-900 border-gray-300 focus:ring-blue-500 focus:border-blue-500'
+                          }`}
+                          value={formData.user_groups}
+                          onChange={handleChange}
+                          required
+                        >
+                          <option value="user">User</option>
+                          <option value="admin">Admin</option>
+                          <option value="superadmin">Superadmin</option>
+                        </select>
+                      </div>
+                    </div>
                   </div>
                   <div className="flex items-center justify-between mt-8">
                     <button

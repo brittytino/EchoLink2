@@ -1,20 +1,19 @@
 import React, { useState } from 'react';
 import { FiPhone, FiSettings, FiUsers, FiList, FiLogOut } from 'react-icons/fi';
-import DialPad from '../components/DialPad';
 import CallLog from '../components/CallLog';
 import Contacts from '../components/Contacts';
 import Settings from '../components/Settings';
+import SipModal from '../components/SipModal';
 
 const HomePage = () => {
   const [activeComponent, setActiveComponent] = useState('welcome');
   const [darkMode, setDarkMode] = useState(false);
+  const [isSipModalOpen, setIsSipModalOpen] = useState(false);
   const username = 'John Doe'; // Example user data
   const userStatus = 'active'; // Options: active, inactive
 
   const renderComponent = () => {
     switch (activeComponent) {
-      case 'dialpad':
-        return <DialPad darkMode={darkMode} onDial={(number) => console.log(number)} />;
       case 'call-log':
         return <CallLog darkMode={darkMode} />;
       case 'contacts':
@@ -96,7 +95,13 @@ const HomePage = () => {
           {icons.map(({ key, label, icon: Icon }) => (
             <button
               key={key}
-              onClick={() => setActiveComponent(key)}
+              onClick={() => {
+                if (key === 'dialpad') {
+                  setIsSipModalOpen(true);
+                } else {
+                  setActiveComponent(key);
+                }
+              }}
               className={`flex flex-col items-center py-4 rounded-lg ${
                 activeComponent === key
                   ? 'bg-blue-600 text-white'
@@ -109,9 +114,11 @@ const HomePage = () => {
           ))}
         </div>
       </div>
+
+      {/* SIP Modal */}
+      <SipModal isOpen={isSipModalOpen} onClose={() => setIsSipModalOpen(false)} />
     </div>
   );
 };
 
 export default HomePage;
-
