@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { FiPhone, FiSettings, FiUsers, FiList, FiLogOut } from 'react-icons/fi';
+import { FiPhone, FiSettings, FiUsers, FiList } from 'react-icons/fi';
+import Navbar from '../components/Navbar';
 import CallLog from '../components/CallLog';
 import Contacts from '../components/Contacts';
 import Settings from '../components/Settings';
@@ -46,42 +47,17 @@ const HomePage = () => {
     <div
       className={`min-h-screen flex flex-col ${
         darkMode ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-900'
-      } transition-all`}
+      } transition-all duration-300 ease-in-out`}
     >
-      {/* Header */}
-      <div className="w-full flex justify-between items-center px-3 py-1 shadow-lg bg-gray-800 text-white sticky top-0 z-10">
-        <button
-          onClick={() => setActiveComponent('welcome')}
-          className="text-lg font-medium bg-gray-700 px-3 py-1 rounded-lg hover:bg-gray-600"
-        >
-          {activeComponent !== 'welcome' ? '← Back' : 'Home'}
-        </button>
-        <div className="flex items-center space-x-4">
-          <span
-            className={`w-3 h-3 rounded-full ${
-              userStatus === 'active' ? 'bg-green-500' : 'bg-red-500'
-            }`}
-            title={userStatus === 'active' ? 'Active' : 'Inactive'}
-          ></span>
-          <div>
-            <p className="text-sm">{username}</p>
-            <p className="text-xs text-gray-400">Status: {userStatus}</p>
-          </div>
-          <button
-            onClick={() => setDarkMode(!darkMode)}
-            className="text-lg bg-gray-700 px-3 py-1 rounded-lg flex items-center space-x-2 hover:bg-gray-600"
-          >
-            {darkMode ? '🌞 Light' : '🌙 Dark'}
-          </button>
-          <button
-            onClick={handleLogout}
-            className="text-lg bg-red-600 px-3 py-1 rounded-lg flex items-center space-x-2 hover:bg-red-700"
-          >
-            <FiLogOut />
-            <span>Logout</span>
-          </button>
-        </div>
-      </div>
+      <Navbar
+        username={username}
+        userStatus={userStatus}
+        darkMode={darkMode}
+        setDarkMode={setDarkMode}
+        activeComponent={activeComponent}
+        setActiveComponent={setActiveComponent}
+        handleLogout={handleLogout}
+      />
 
       {/* Main Content */}
       <div className="flex-grow w-full p-6 flex justify-center items-center">
@@ -90,7 +66,7 @@ const HomePage = () => {
       </div>
 
       {/* Footer Navigation */}
-      <div className="w-full fixed bottom-0 text-white py-4">
+      <div className={`w-full fixed bottom-0 ${darkMode ? 'text-white' : 'text-gray-900'} py-4`}>
         <div className="grid grid-cols-4 gap-2.5 max-w-xl mx-auto">
           {icons.map(({ key, label, icon: Icon }) => (
             <button
@@ -102,10 +78,12 @@ const HomePage = () => {
                   setActiveComponent(key);
                 }
               }}
-              className={`flex flex-col items-center py-4 rounded-lg ${
+              className={`flex flex-col items-center py-4 rounded-lg transition-colors duration-300 ${
                 activeComponent === key
                   ? 'bg-blue-600 text-white'
-                  : 'bg-gray-700 text-gray-400 hover:bg-blue-700 hover:text-white'
+                  : darkMode
+                    ? 'bg-gray-700 text-gray-400 hover:bg-blue-700 hover:text-white'
+                    : 'bg-gray-200 text-gray-600 hover:bg-blue-600 hover:text-white'
               }`}
             >
               <Icon className="text-2xl mb-1" />
@@ -122,3 +100,4 @@ const HomePage = () => {
 };
 
 export default HomePage;
+

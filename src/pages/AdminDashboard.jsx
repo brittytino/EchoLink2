@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { FaTachometerAlt, FaUsers, FaPhoneAlt, FaCog, FaPhone, FaTable, FaSun, FaMoon, FaSignOutAlt, FaBell, FaBars } from 'react-icons/fa';
 import { Dashboard, Users, CDR, Settings, Call, Extension} from '../components/Admin';
 import ForgotPassword from '../components/Admin/ForgotPassword'; // Update this line with the correct path
+import SipModal from '../components/SipModal';
 
 const AdminDashboard = () => {
   const [activeComponent, setActiveComponent] = useState('Dashboard');
@@ -10,6 +11,7 @@ const AdminDashboard = () => {
   const [notifications, setNotifications] = useState([]);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [currentTime, setCurrentTime] = useState(new Date());
+  const [isSipModalOpen, setIsSipModalOpen] = useState(false);
 
   useEffect(() => {
     const timer = setInterval(() => setCurrentTime(new Date()), 1000);
@@ -26,6 +28,12 @@ const AdminDashboard = () => {
     };
     fetchNotifications();
   }, []);
+
+  useEffect(() => {
+    if (activeComponent === 'Call') {
+      setIsSipModalOpen(true);
+    }
+  }, [activeComponent]);
 
   const renderComponent = () => {
     switch (activeComponent) {
@@ -178,9 +186,11 @@ const AdminDashboard = () => {
           </div>
         </div>
       )}
+
+      {/* SIP Modal */}
+      <SipModal isOpen={isSipModalOpen} onClose={() => setIsSipModalOpen(false)} />
     </div>
   );
 };
 
 export default AdminDashboard;
-

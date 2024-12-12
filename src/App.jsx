@@ -11,6 +11,7 @@ import { AdminAuthProvider } from './context/AdminAuthContext';
 import PrivateRoute from './components/PrivateRoute';
 import PrivateAdminRoute from './components/PrivateAdminRoute';
 import SipModal from './components/SipModal';
+import Hero from './components/Hero';
 
 
 const App = () => {
@@ -20,12 +21,14 @@ const App = () => {
         <AdminAuthProvider>
           <Router>
             <Routes>
-              <Route path="/" element={<LoginSignupPage />} />
+            <Route path="/" element={<Hero />} />
+              <Route path="/login" element={<LoginSignupPage />} />
               <Route path="/home" element={<PrivateRoute element={<HomePage />} />} />
               <Route path="/admin-login" element={<AdminLoginPage />} />
               <Route path="/admin" element={<PrivateAdminRoute element={<AdminDashboard />} />} />
               <Route path="/server" element={<PrivateRoute element={<ServerTest />} />} />
               <Route path='/sip' element={<SipModal />} />
+              <Route path='/hero' element={<Hero />} />
             </Routes>
           </Router>
         </AdminAuthProvider>
