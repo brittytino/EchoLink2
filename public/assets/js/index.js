@@ -176,7 +176,7 @@ function sipRegister() {
     else return;
 }
 
-function sipCalll702() {
+function sipCalll704() {
     // Check if there is an existing call session, which indicates an incoming call
     if (oSipSessionCall) {
         // Accept the incoming call
@@ -187,7 +187,7 @@ function sipCalll702() {
         oSipSessionCall = oSipStack.newSession("call-audiovideo", oConfigCall);
 
         // Use a default number or a dynamically set one, could be set via a global variable or a form input
-        var callNumber = "702"; // Default number, consider changing based on your application needs
+        var callNumber = "704"; // Default number, consider changing based on your application needs
 
         // Make the call
         if (oSipSessionCall.call(callNumber) != 0) {
