@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import { FiPhone, FiSettings, FiUsers, FiList } from 'react-icons/fi';
+import { FiPhone, FiSettings, FiList } from 'react-icons/fi';
 import Navbar from '../components/Navbar';
 import CallLog from '../components/CallLog';
-import Contacts from '../components/Contacts';
 import Settings from '../components/Settings';
 import SipModal from '../components/SipModal';
 
@@ -13,12 +12,17 @@ const HomePage = () => {
   const username = 'John Doe'; // Example user data
   const userStatus = 'active'; // Options: active, inactive
 
+  // Define the icons for the footer navigation
+  const icons = [
+    { key: 'dialpad', label: 'Dial Pad', icon: FiPhone },
+    { key: 'call-log', label: 'Call Log', icon: FiList },
+    { key: 'settings', label: 'Settings', icon: FiSettings },
+  ];
+
   const renderComponent = () => {
     switch (activeComponent) {
       case 'call-log':
         return <CallLog darkMode={darkMode} />;
-      case 'contacts':
-        return <Contacts darkMode={darkMode} />;
       case 'settings':
         return <Settings darkMode={darkMode} />;
       default:
@@ -31,59 +35,37 @@ const HomePage = () => {
     }
   };
 
-  const icons = [
-    { key: 'dialpad', label: 'Dial Pad', icon: FiPhone },
-    { key: 'call-log', label: 'Call Log', icon: FiList },
-    { key: 'contacts', label: 'Contacts', icon: FiUsers },
-    { key: 'settings', label: 'Settings', icon: FiSettings },
-  ];
-
-  const handleLogout = () => {
-    // Add any logout logic here (e.g., clearing local storage, etc.)
-    window.location.href = '/';
-  };
-
   return (
-    <div
-      className={`min-h-screen flex flex-col ${
-        darkMode ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-900'
-      } transition-all duration-300 ease-in-out`}
-    >
+    <div className={`min-h-screen flex flex-col ${
+      darkMode ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-900'
+    } transition-all duration-300 ease-in-out`}>
       <Navbar
         username={username}
         userStatus={userStatus}
         darkMode={darkMode}
         setDarkMode={setDarkMode}
         activeComponent={activeComponent}
-        setActiveComponent={setActiveComponent}
-        handleLogout={handleLogout}
+        handleLogout={() => window.location.href = '/'}
       />
 
-      {/* Main Content */}
-      <div className="flex-grow w-full p-6 flex justify-center items-center">
-        {/* Render Active Component */}
+      {/* Main Content with sufficient bottom padding */}
+      <div className="flex-grow w-full p-6 flex justify-center items-center pb-20">
         <div className="w-full max-w-4xl">{renderComponent()}</div>
       </div>
 
       {/* Footer Navigation */}
-      <div className={`w-full fixed bottom-0 ${darkMode ? 'text-white' : 'text-gray-900'} py-4`}>
-        <div className="grid grid-cols-4 gap-2.5 max-w-xl mx-auto">
+      <div className={`fixed bottom-0 inset-x-0 ${darkMode ? 'bg-gray-800' : 'bg-white'} py-4 shadow-lg`}>
+        <div className="grid grid-cols-3 gap-3 place-items-center max-w-md mx-auto">
           {icons.map(({ key, label, icon: Icon }) => (
             <button
               key={key}
-              onClick={() => {
-                if (key === 'dialpad') {
-                  setIsSipModalOpen(true);
-                } else {
-                  setActiveComponent(key);
-                }
-              }}
-              className={`flex flex-col items-center py-4 rounded-lg transition-colors duration-300 ${
+              onClick={() => key === 'dialpad' ? setIsSipModalOpen(true) : setActiveComponent(key)}
+              className={`flex flex-col items-center p-2 rounded-lg transition-colors duration-300 ${
                 activeComponent === key
-                  ? 'bg-blue-600 text-white'
+                  ? 'bg-blue-600 text-white shadow'
                   : darkMode
-                    ? 'bg-gray-700 text-gray-400 hover:bg-blue-700 hover:text-white'
-                    : 'bg-gray-200 text-gray-600 hover:bg-blue-600 hover:text-white'
+                    ? 'text-gray-400 hover:bg-blue-700 hover:text-white'
+                    : 'text-gray-600 hover:bg-blue-600 hover:text-white'
               }`}
             >
               <Icon className="text-2xl mb-1" />
@@ -100,4 +82,3 @@ const HomePage = () => {
 };
 
 export default HomePage;
-
