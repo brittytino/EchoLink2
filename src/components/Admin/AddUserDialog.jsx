@@ -32,7 +32,9 @@ export default function UserExtensionDialog({ isOpen, closeModal, darkMode }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
+    setResponseMessage('');
 
+    // Validate passwords
     if (formData.password !== formData.confirm_password) {
       setResponseMessage('Passwords do not match.');
       setIsLoading(false);
@@ -112,7 +114,11 @@ export default function UserExtensionDialog({ isOpen, closeModal, darkMode }) {
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className={`w-full max-w-4xl transform overflow-hidden rounded-2xl p-6 text-left align-middle shadow-xl transition-all ${darkMode ? 'bg-gray-800 text-white' : 'bg-white'}`}>
+              <Dialog.Panel
+                className={`w-full max-w-4xl transform overflow-hidden rounded-2xl p-6 text-left align-middle shadow-xl transition-all ${
+                  darkMode ? 'bg-gray-800 text-white' : 'bg-white'
+                }`}
+              >
                 <Dialog.Title as="h3" className="text-2xl font-semibold leading-6 mb-6 flex justify-between items-center">
                   Create User
                 </Dialog.Title>
@@ -131,7 +137,11 @@ export default function UserExtensionDialog({ isOpen, closeModal, darkMode }) {
                             type={type}
                             name={name}
                             id={name}
-                            className={`block w-full pl-10 pr-3 py-2 sm:text-sm rounded-md ${darkMode ? 'bg-gray-700 text-white border-gray-600 focus:ring-blue-500 focus:border-blue-500' : 'bg-white text-gray-900 border-gray-300 focus:ring-blue-500 focus:border-blue-500'}`}
+                            className={`block w-full pl-10 pr-3 py-2 sm:text-sm rounded-md ${
+                              darkMode
+                                ? 'bg-gray-700 text-white border-gray-600 focus:ring-blue-500 focus:border-blue-500'
+                                : 'bg-white text-gray-900 border-gray-300 focus:ring-blue-500 focus:border-blue-500'
+                            }`}
                             placeholder={`Enter ${name.replace(/_/g, ' ')}`}
                             value={formData[name]}
                             onChange={handleChange}
@@ -145,20 +155,28 @@ export default function UserExtensionDialog({ isOpen, closeModal, darkMode }) {
                     <button
                       type="button"
                       onClick={closeModal}
-                      className={`px-4 py-2 text-sm font-medium rounded-md ${darkMode ? 'bg-gray-600 text-white hover:bg-gray-500' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'} focus:outline-none`}
+                      className={`px-4 py-2 text-sm font-medium rounded-md ${
+                        darkMode ? 'bg-gray-600 text-white hover:bg-gray-500' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                      } focus:outline-none`}
                     >
                       Cancel
                     </button>
                     <button
                       type="submit"
-                      className={`inline-flex justify-center rounded-md px-4 py-2 text-sm font-medium text-white ${isLoading ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'}`}
+                      className={`inline-flex justify-center rounded-md px-4 py-2 text-sm font-medium text-white ${
+                        isLoading ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'
+                      }`}
                       disabled={isLoading}
                     >
                       {isLoading ? 'Creating...' : 'Create User'}
                     </button>
                   </div>
                 </form>
-                {responseMessage && <p className={`mt-4 text-sm ${responseMessage.includes('successfully') ? 'text-green-500' : 'text-red-500'}`}>{responseMessage}</p>}
+                {responseMessage && (
+                  <p className={`mt-4 text-sm ${responseMessage.includes('successfully') ? 'text-green-500' : 'text-red-500'}`}>
+                    {responseMessage}
+                  </p>
+                )}
               </Dialog.Panel>
             </Transition.Child>
           </div>
